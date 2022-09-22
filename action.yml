@@ -52,6 +52,6 @@ runs:
       uses: actions/upload-artifact@main
       with:
         name: ${{ inputs.docC-generated-static-site-zipped-upload-name }}
-        path: ${{ runner.temp }}/${{ inputs.docC-generated-static-site-zipped-upload-name }}
+        path: ${{ runner.temp }}/${{ inputs.docC-generated-static-site-zipped-upload-name }}.tar
         retention-days: 1
         if-no-files-found: error
