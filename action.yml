@@ -1,4 +1,4 @@
-name: 'Build DocC Sttaic Site'
+name: 'Build DocC Static Site'
 description: 'Build DocC Static Site'
 
 inputs:
