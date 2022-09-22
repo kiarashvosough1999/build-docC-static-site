@@ -59,4 +59,5 @@ Feel free to share your ideas or any other problems. Pull requests are welcomed.
 
 ## License
 
-CocoAttributedStringBuilder is released under an MIT license. See [LICENSE](https://github.com/kiarashvosough1999/build-docC-static-site/blob/master/LICENSE) for more information.
+build-docC-static-site
+ is released under an MIT license. See [LICENSE](https://github.com/kiarashvosough1999/build-docC-static-site/blob/master/LICENSE) for more information.
