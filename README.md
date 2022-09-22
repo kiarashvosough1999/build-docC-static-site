@@ -19,6 +19,8 @@ Build DocC Static Site: Build Static Site From DocC Archive, Document Your Proje
 
 See [action.yml](https://github.com/kiarashvosough1999/build-docC-static-site/blob/master/action.yml).
 
+> Make sure to set the version to latest tag.
+
 As An Example:
 
 ```yml
@@ -38,7 +40,7 @@ jobs:
        ref: ${{ github.event.pull_request.head.ref }}
 
     - name: build static site
-      uses: actions/build-docC-static-site@v1
+      uses: actions/build-docC-static-site@v1.0.2
 ```
 
 ## Integration With Github Pages Deployment
