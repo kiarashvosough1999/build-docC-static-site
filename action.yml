@@ -44,7 +44,7 @@ runs:
       shell: bash
       env:
         DocC_Static_Site_Build_Ouptput_Path: ./docc_static_site
-        Zipped_Site_Output_Directory: $RUNNER_TEMP/${{ inputs.docC-generated-static-site-zipped-upload-name }}.tar
+        Zipped_Site_Output_Directory: ${{ runner.temp }}/${{ inputs.docC-generated-static-site-zipped-upload-name }}.tar
       run: |
         gtar --dereference --hard-dereference --directory $DocC_Static_Site_Build_Ouptput_Path -cvf $Zipped_Site_Output_Directory --exclude=.git --exclude=.github .
 
