@@ -1,0 +1,57 @@
+name: 'Build DocC Sttaic Site'
+description: 'Build DocC Static Site'
+
+inputs:
+  docC-generated-static-site-zipped-upload-name:
+    description: 'The upload name of sttaic site zipped artifact.'
+    required: true
+    default: 'docC_generated_site_zipped'
+
+runs:
+  using: "composite"
+  steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      with:
+       repository: ${{ github.event.pull_request.head.repo.full_name }}
+       ref: ${{ github.event.pull_request.head.ref }}
+
+    - name: Prepare Building DocC
+      shell: bash
+      env:
+        DocC_Static_Site_Build_Ouptput_Path: ./docc_static_site
+        DocC_Derived_Data_Path_Build: ./.doc_build
+      run: |
+        mkdir $DocC_Derived_Data_Path_Build
+        mkdir $DocC_Static_Site_Build_Ouptput_Path
+
+    - name: Build DocC
+      shell: bash
+      env:
+        DocC_Static_Site_Build_Ouptput_Path: ./docc_static_site
+        DocC_Derived_Data_Path_Build: ./.doc_build
+      run: |
+        Package_Name=$(basename "$PWD")
+        DocC_Find_Executable_Path=$(xcrun --find docc)
+
+        xcodebuild docbuild -scheme $Package_Name -derivedDataPath $DocC_Derived_Data_Path_Build -destination 'platform=iOS Simulator,name=iPhone 13'
+
+        Docc_Generated_Archive_Path=$(find . -regex '.*/[^/]*.doccarchive')
+
+        $DocC_Find_Executable_Path process-archive transform-for-static-hosting $Docc_Generated_Archive_Path --output-path $DocC_Static_Site_Build_Ouptput_Path --hosting-base-path $Package_Name
+
+    - name: Archive DocC Generated Site Artifact
+      shell: bash
+      env:
+        DocC_Static_Site_Build_Ouptput_Path: ./docc_static_site
+        Zipped_Site_Output_Directory: $RUNNER_TEMP/${{ inputs.docC-generated-static-site-zipped-upload-name }}.tar
+      run: |
+        gtar --dereference --hard-dereference --directory $DocC_Static_Site_Build_Ouptput_Path -cvf $Zipped_Site_Output_Directory --exclude=.git --exclude=.github .
+
+    - name: Upload DocC Artifact
+      uses: actions/upload-artifact@main
+      with:
+        name: ${{ inputs.docC-generated-static-site-zipped-upload-name }}
+        path: ${{ runner.temp }}/${{ inputs.docC-generated-static-site-zipped-upload-name }}
+        retention-days: 1
+        if-no-files-found: error
